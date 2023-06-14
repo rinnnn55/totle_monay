@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>お金記録サイト</title>
+  <link rel="stylesheet" type="text/css" href="stylesheet/styles.css">
+</head>
+<body>
+  <h1>お金の記録</h1>
+  <h2 id = "currentMonth">d</h2>
+  <div class="contents">
+    
+    <form id="myForm">
+      <label for="input-Money">お金：</label>
+      <input type="number" id="input-Money" name="input-Money">
+      <button type="button" onclick="recordTime()">記録する</button>
+      <button class="reset" tope="button" onclick="confirmDelete()">リセット</button>
+    </form>
+    <p>お金： <span id="total-Money"></span> 円</p>
+  </div>
+  
+
+  <script>
+    let currentMonth = new Date().getMonth()+1;
+
+    document.getElementById("currentMonth").textContent = currentMonth + "月"
+    function recordTime() {
+      let inputMoney1 = document.getElementById("input-Money").value;
+
+      if(inputMoney1 === ""){
+        return;
+      }
+      // ローカルストレージから前日までの作業時間を取得する
+      let totalMoney = parseInt(localStorage.getItem("totalMoney")) || 0;
+
+      // フォームに入力された作業時間を取得する
+      let inputMoney = parseInt(document.getElementById("input-Money").value);
+
+      // 入力された作業時間をローカルストレージに保存する
+      localStorage.setItem("totalMoney", totalMoney + inputMoney);
+
+      // 合計作業時間を表示する
+      document.getElementById("total-Money").textContent = totalMoney + inputMoney;
+
+      document.getElementById("input-Money").value = "";
+      //document.getElementById("myForm").reset();
+    }
+
+    function confirmDelete(){
+      if(confirm("ななちゃんほんとにリセットする？")){
+       
+          localStorage.setItem("totalMoney", 0);
+        
+      }
+    }
+
+    // ページ読み込み時に合計作業時間を表示する
+    document.getElementById("total-Money").textContent = localStorage.getItem("totalMoney") || 0;
+  </script>
+</body>
+</html>
